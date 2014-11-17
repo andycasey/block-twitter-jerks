@@ -26,8 +26,8 @@ me = api.me()
 
 # Jerks
 jerks = []
-jerks.append('benpobjie')
 jerks.append('clementine_ford')
+jerks.append('benpobjie')
 jerks.append('chriskkenny')
 jerks.append('mirandadevine')
 jerks.append('SharriMarkson')
@@ -59,6 +59,8 @@ def block_jerks(page):
 			print "Skipped: You're following " + subjerk.screen_name
 		elif subjerk.id in followers:
 			print "Skipped: " + subjerk.screen_name + " follows you"
+		elif subjerk.id in blocked:
+			print "Skipped: " + subjerk.screen_name + " already blocked"
 		else:
 			print "Blocking jerk: " + subjerk.screen_name
 			# Add to the blobke list
