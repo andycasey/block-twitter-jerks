@@ -12,7 +12,7 @@ consumer_key 		= ""
 consumer_secret 	= ""
 access_token 		= ""
 access_token_secret	= ""
-filename 			= "jerks.csv"
+filename			= "jerks.csv"
 
 # OAuth Handler
 auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
