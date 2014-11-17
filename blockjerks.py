@@ -24,7 +24,7 @@ api = tweepy.API(auth)
 # My user profile
 me = api.me()
 
-# Append your own jerks
+# Jerks
 jerks = []
 jerks.append('benpobjie')
 jerks.append('clementine_ford')
@@ -54,12 +54,11 @@ def get_following():
 			following.append(id)
 
 def block_jerks(page):
-
 	for subjerk in page:
 		if subjerk.id in following:
-			print "Failed: You're following " + subjerk.screen_name
+			print "Skipped: You're following " + subjerk.screen_name
 		elif subjerk.id in followers:
-			print "Failed: " + subjerk.screen_name + " follows you"
+			print "Skipped: " + subjerk.screen_name + " follows you"
 		else:
 			print "Blocking jerk: " + subjerk.screen_name
 			# Add to the blobke list
@@ -70,6 +69,7 @@ def block_jerks(page):
 	print "Sleeping for one minute..."
 	time.sleep(60)
 
+# Get my followers/friends
 get_following()
 get_followers()
 
@@ -77,11 +77,14 @@ print "=========================================================================
 print "Hello " + me.screen_name
 print "You have " + str(len(followers)) + " followers"
 print "You are following " + str(len(following)) + " people"
-print "NOTE: There is a 1 minute pause between blocking batches to avoid rate limiting"
+print "NOTE: There is a 60-second pause between blocking batches to avoid rate limiting"
 
 # Jerk loop
-X = 1
 for jerk in jerks:
+	# Block jerk
+	blocked.append([jerk])
+	api.create_block(jerk)
+
 	# Block jerk's followers
 	print "================================================================================"
 	print "BLOCKING " + jerk + "'s JERK FOLLOWERS"
