@@ -4,9 +4,11 @@ block-twitter-jerks
 Block Twitter jerks, their jerk followers, and jerks they follow. 
 
 ### Purpose
-Twitter is home to a whole lot of jerks. Twitter's recent timeline tweaks means that a whole lot of tweets from people you would never follow in a million years end up in your timeline. 9 times out of 10 it's some jerk who seeks to impose their world view on the rest of them. 
+Twitter is home to a lot of jerks. 
 
-Well they're jerks, so fuck them, fuck their followers, and fuck the people they follow.
+Twitter's recent timeline tweaks means that tweets from people you would never follow in a million years end up in your timeline. 9 times out of 10 it's some jerk who seeks to impose their world view on the rest of them. 
+
+And who wants jerks sullying their timeline?
 
 ### How it works
 The script iterates through a list of user-defined jerks. It then looks at the jerks who they follow, and the jerks that follow them. It then looks to see if you are following/followed by any of these jerks. If not, then it those jerks are blocked.
