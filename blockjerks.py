@@ -41,6 +41,31 @@ following = []
 blocked = []
 filename = "jerks.csv"
 
+# Saved values
+alpha_jerk_iteration = 0
+beta_jerk_page = 0
+beta_jerk_iteration_type = 0
+
+def get_shelf():
+	# Jerk shelf
+	shelf = shelve.open('jerk-shelf')
+	try:
+		global blocked
+		global alpha_jerk_iteration
+		global beta_jerk_iteration_type
+		global beta_jerk_page
+
+		blocked = shelf['blocked']
+		alpha_jerk_iteration = shelf['alpha_jerk_iteration']
+		beta_jerk_page = shelf['beta_jerk_page']
+		beta_jerk_iteration_type = shelf['beta_jerk_iteration_type']
+
+		for s in blocked:
+			print s
+	except KeyError:
+		print "ERROR: Could not open shelf file"
+	shelf.close()
+
 def get_followers():
 	followers_cursor = tweepy.Cursor(api.followers_ids, id=me.id)
 	for id in followers_cursor.items():
@@ -53,56 +78,110 @@ def get_following():
 		if id not in followers and id not in following:
 			following.append(id)
 
-def block_jerks(page):
-	for subjerk in page:
-		if subjerk.id in following:
-			print "Skipped: You're following " + subjerk.screen_name
-		elif subjerk.id in followers:
-			print "Skipped: " + subjerk.screen_name + " follows you"
-		elif subjerk.id in blocked:
-			print "Skipped: " + subjerk.screen_name + " already blocked"
-		else:
-			print "Blocking jerk: " + subjerk.screen_name
-			# Add to the blobke list
-			blocked.append([subjerk.screen_name])
-			# Create block
-			api.create_block(subjerk.id)
+def update_shelf(key, value):
+	shelf = shelve.open('jerk-shelf')
+	shelf[key] = value;
+	shelf.sync();
+	shelf.close();
 
-	print "Sleeping for one minute..."
-	time.sleep(60)
+def block_jerk(screen_name):
+	if [screen_name] not in blocked:
+		# Add to the blocked list
+		blocked.append([screen_name])
+		# Create block
+		api.create_block(screen_name)
+		# Update shelf
+		update_shelf('blocked', blocked)
+	else:
+		print "Skipped: @" + screen_name + " already blocked"
+
+
+def block_jerks(page):
+	for betajerk in page:
+		if betajerk.id in following:
+			print "Skipped: You're following @" + betajerk.screen_name
+		elif betajerk.id in followers:
+			print "Skipped: @" + betajerk.screen_name + " follows you"
+		elif [betajerk.screen_name] in blocked:
+			print "Skipped: @" + betajerk.screen_name + " already blocked"
+		else:
+			print "Blocking jerk: @" + betajerk.screen_name
+			block_jerk(str(betajerk.screen_name))
+
+		# Dump file
+		dump_file()
+
+def dump_file():
+	# Dump jerks into a file
+	f = open(filename, 'wb')
+	w = csv.writer(f)
+	w.writerows(blocked)
+	f.close()
+
+def iterate():
+	print "================================================================================"
+	print "HELLO " + me.screen_name
+	print "You have " + str(len(followers)) + " followers"
+	print "You are following " + str(len(following)) + " people"
+	print "================================================================================"
+	print "SHELF INFO"
+	print "	Alpha Jerk Iteration: " + str(alpha_jerk_iteration)
+	print "	Beta Jerk Page: " + str(beta_jerk_page)
+	print "	Beta Jerk Iteration Type: " + str(beta_jerk_iteration_type)
+
+	# Jerk loop
+	x = 0
+	y = 0
+	for jerk in jerks:
+		# Block jerk
+		if x >= alpha_jerk_iteration:
+			print "================================================================================"
+			print "BLOCKING @" + jerk
+			print "================================================================================"
+			block_jerk(jerk)
+			update_shelf('alpha_jerk_iteration', x)
+
+			# Block jerk's followers
+			print "================================================================================"
+			print "BLOCKING @" + jerk + "'s jerk followers"
+			print "================================================================================"
+			
+			for page in tweepy.Cursor(api.followers, jerk).pages():
+				if y >= beta_jerk_page and (beta_jerk_iteration_type == 0 or beta_jerk_iteration_type == 1):
+					update_shelf('beta_jerk_iteration_type', 1)
+					update_shelf('beta_jerk_page', y)
+					block_jerks(page)
+
+				else:
+					print "Skipping page " + str(y)
+				y += 1
+			
+				print "Sleeping for 60 seconds..."
+				time.sleep(60)
+			
+			y = 0
+			# Block jerks this jerk follows
+			print "================================================================================"
+			print "BLOCKING jerks @" + jerk + " follows"
+			print "================================================================================"
+			for page in tweepy.Cursor(api.following, jerk).pages():
+				if y >= beta_jerk_page and (beta_jerk_iteration_type == 0 or beta_jerk_iteration_type == 2):
+					update_shelf('beta_jerk_iteration_type', 2)
+					update_shelf('beta_jerk_page', y)
+					block_jerks(page)
+				else:
+					print "Skipping page " + str(y)
+				y += 1
+
+				print "Sleeping for 60 seconds..."
+				time.sleep(60)
+		else:
+			print "Skipping jerk " + jerk
+	
+		x += 1
 
 # Get my followers/friends
 get_following()
 get_followers()
-
-print "================================================================================"
-print "Hello " + me.screen_name
-print "You have " + str(len(followers)) + " followers"
-print "You are following " + str(len(following)) + " people"
-print "NOTE: There is a 60-second pause between blocking batches to avoid rate limiting"
-
-# Jerk loop
-for jerk in jerks:
-	# Block jerk
-	blocked.append([jerk])
-	api.create_block(jerk)
-
-	# Block jerk's followers
-	print "================================================================================"
-	print "BLOCKING " + jerk + "'s JERK FOLLOWERS"
-	print "================================================================================"
-	
-	for page in tweepy.Cursor(api.followers, jerk).pages():
-		block_jerks(page)
-
-	# Block jerks this jerk follows
-	print "BLOCKING JERKS " + jerk + " FOLLOWS"
-	print "================================================================================"
-	for page in tweepy.Cursor(api.following, jerk).pages():
-		block_jerks(page)
-
-# Dump jerks into a file
-f = open(filename, 'wb')
-w = csv.writer(f)
-w.writerows(blocked)
-f.close()
+get_shelf()
+iterate()
