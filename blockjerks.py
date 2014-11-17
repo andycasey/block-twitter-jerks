@@ -12,7 +12,6 @@ consumer_key 		= ""
 consumer_secret 	= ""
 access_token 		= ""
 access_token_secret	= ""
-filename			= "jerks.csv"
 
 # OAuth Handler
 auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
@@ -40,6 +39,7 @@ jerks.append('chalky021154')
 followers = []
 following = []
 blocked = []
+filename = "jerks.csv"
 
 def get_followers():
 	followers_cursor = tweepy.Cursor(api.followers_ids, id=me.id)
