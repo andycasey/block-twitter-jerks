@@ -34,6 +34,7 @@ jerks.append('CatherineDeveny')
 jerks.append('CorrellioRedux')
 jerks.append('Asher_Wolf')
 jerks.append('chalky021154')
+jerks.append('Vanbadham')
 
 # Followers/Following. Probably jerks.
 followers = []
