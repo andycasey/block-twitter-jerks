@@ -11,7 +11,7 @@ Twitter's recent timeline tweaks means that tweets from people you would never f
 This script gives people with no strong opinions or beliefs a more pleasant Twitter experience. Enjoy!
 
 ### How it works
-The script iterates through a list of user-defined jerks. It then looks at the jerks who they follow, and the jerks that follow them. It then looks to see if you are following/followed by any of these jerks. If not, then it those jerks are blocked.
+The script iterates through a list of jerks, looks at the jerks they follow, and the jerks that follow them then blocks everyone. By default it uses a list of a few well-known Australian Twitter jerks, but you can customise it however you want.
 
 ### Installation
 
