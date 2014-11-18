@@ -26,7 +26,6 @@ me = api.me()
 # Jerks
 jerks = []
 jerks.append('clementine_ford')
-jerks.append('benpobjie')
 jerks.append('chriskkenny')
 jerks.append('mirandadevine')
 jerks.append('SharriMarkson')
