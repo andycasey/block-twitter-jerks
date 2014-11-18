@@ -25,15 +25,18 @@ me = api.me()
 
 # Jerks
 jerks = []
+jerks.append('CorrellioRedux')
+jerks.append('BernardGaynor')
+jerks.append('aclobby')
+jerks.append('chalky021154')
 jerks.append('clementine_ford')
 jerks.append('chriskkenny')
 jerks.append('mirandadevine')
 jerks.append('SharriMarkson')
 jerks.append('CatherineDeveny')
-jerks.append('CorrellioRedux')
 jerks.append('Asher_Wolf')
-jerks.append('chalky021154')
 jerks.append('Vanbadham')
+jerks.append('RitaPanahi')
 
 # Followers/Following. Probably jerks.
 followers = []
