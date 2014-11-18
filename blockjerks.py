@@ -152,9 +152,6 @@ def iterate():
 					update_shelf('beta_jerk_iteration_type', 1)
 					update_shelf('beta_jerk_page', y)
 					block_jerks(page)
-
-					print "Sleeping for 60 seconds..."
-					time.sleep(60)
 				else:
 					print "Skipping page " + str(y)
 				y += 1
@@ -172,9 +169,6 @@ def iterate():
 					update_shelf('beta_jerk_iteration_type', 2)
 					update_shelf('beta_jerk_page', y)
 					block_jerks(page)
-
-					print "Sleeping for 60 seconds..."
-					time.sleep(60)
 				else:
 					print "Skipping page " + str(y)
 				y += 1
