@@ -38,6 +38,7 @@ jerks.append('Asher_Wolf')
 jerks.append('Vanbadham')
 jerks.append('RitaPanahi')
 jerks.append('StevensAsh')
+jerks.append('struct') # <3
 
 # Followers/Following. Probably jerks.
 followers = []
