@@ -147,16 +147,18 @@ def iterate():
 			print "BLOCKING @" + jerk + "'s jerk followers"
 			print "================================================================================"
 			
-			for page in tweepy.Cursor(api.followers, jerk).pages():
+			for page in tweepy.Cursor(api.followers, jerk, count=200).pages():
 				if y >= beta_jerk_page and (beta_jerk_iteration_type == 0 or beta_jerk_iteration_type == 1):
 					update_shelf('beta_jerk_iteration_type', 1)
 					update_shelf('beta_jerk_page', y)
 					block_jerks(page)
 
+					print "Sleeping for 60 seconds..."
+					time.sleep(60)
 				else:
 					print "Skipping page " + str(y)
 				y += 1
-			
+
 				print "Sleeping for 60 seconds..."
 				time.sleep(60)
 			
@@ -165,11 +167,14 @@ def iterate():
 			print "================================================================================"
 			print "BLOCKING jerks @" + jerk + " follows"
 			print "================================================================================"
-			for page in tweepy.Cursor(api.following, jerk).pages():
+			for page in tweepy.Cursor(api.following, jerk, count=200).pages():
 				if y >= beta_jerk_page and (beta_jerk_iteration_type == 0 or beta_jerk_iteration_type == 2):
 					update_shelf('beta_jerk_iteration_type', 2)
 					update_shelf('beta_jerk_page', y)
 					block_jerks(page)
+
+					print "Sleeping for 60 seconds..."
+					time.sleep(60)
 				else:
 					print "Skipping page " + str(y)
 				y += 1
